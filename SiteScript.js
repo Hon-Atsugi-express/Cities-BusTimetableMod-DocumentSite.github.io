@@ -112,6 +112,22 @@ window.addEventListener("load", () => {
                     pageDescriptionElement.classList.add("page-description");
                     pageDescriptionElement.textContent = page.getElementsByTagName("description")[0].textContent;
                     pageBox.appendChild(pageDescriptionElement);
+                    const tagList = Array.from(page.getElementsByTagName("tags")[0].children);
+                    if (tagList.length > 0) {
+                        const pageTagsBox = document.createElement("div");
+                        pageTagsBox.appendChild(document.createTextNode(isJapanese ? "タグ: " : "Tag: "));
+                        tagList.forEach((tag) => {
+                            const tagName = tag.textContent;
+                            const tagLink = document.createElement("a");
+                            tagLink.href = topUrl + `search/?tags=${tagName}`;
+                            const tagSpan = document.createElement("span");
+                            tagSpan.classList.add("tag-span");
+                            tagSpan.textContent = tagName;
+                            tagLink.appendChild(tagSpan);
+                            pageTagsBox.appendChild(tagLink);
+                        });
+                        pageBox.appendChild(pageTagsBox);
+                    }
                     pagesView.appendChild(pageBox);
                 });
             });
@@ -164,6 +180,22 @@ window.addEventListener("load", () => {
                             const replacedDescription = pageDescription.replaceAll(word, `<span class="search-highlight-text-description">${word}</span>`);
                             pageDescriptionElement.innerHTML = replacedDescription;
                             pageBox.appendChild(pageDescriptionElement);
+                            const tagList = Array.from(page.getElementsByTagName("tags")[0].children);
+                            if (tagList.length > 0) {
+                                const pageTagsBox = document.createElement("div");
+                                pageTagsBox.appendChild(document.createTextNode(isJapanese ? "タグ: " : "Tag: "));
+                                tagList.forEach((tag) => {
+                                    const tagName = tag.textContent;
+                                    const tagLink = document.createElement("a");
+                                    tagLink.href = topUrl + `search/?tags=${tagName}`;
+                                    const tagSpan = document.createElement("span");
+                                    tagSpan.classList.add("tag-span");
+                                    tagSpan.textContent = tagName;
+                                    tagLink.appendChild(tagSpan);
+                                    pageTagsBox.appendChild(tagLink);
+                                });
+                                pageBox.appendChild(pageTagsBox);
+                            }
                             pagesView.appendChild(pageBox);
                         }
                     });
