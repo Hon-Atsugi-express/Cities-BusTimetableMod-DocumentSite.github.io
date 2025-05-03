@@ -89,6 +89,21 @@ a:has(.tag-span) {
 
 @media screen and (max-width: 480px) {
     .site-header {
-        display: none;
+        height: 50px;
+        justify-content: center;
+    }
+    #site-name {
+        font-size: 15px;
+        position: relative;
+        right: 10px;
+    }
+    #search-box {
+        width: 170px;
+        height: 35px;
+        border-radius: 20px;
+    }
+    #search-box::placeholder {
+        position: relative;
+        left: 10px;
     }
 }

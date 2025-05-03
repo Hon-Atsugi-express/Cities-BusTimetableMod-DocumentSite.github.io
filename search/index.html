@@ -22,9 +22,10 @@
             display: none;
         }
 
-        #search-panel {
+        #detail-search-panel {
             background: rgb(175, 175, 205);
-            padding: 8px;
+            padding: 16px;
+            border-radius: 10px;
         }
 
         #detail-search-box {
@@ -33,6 +34,12 @@
             border: 0;
             outline: 0;
             display: inline;
+        }
+
+        #detail-search-box-tags {
+            display: inline-block;
+            width: 250px;
+            height: 40px;
         }
 
         #detail-search-btn {
@@ -44,16 +51,31 @@
             position: relative;
             top: 1.5px;
         }
+
+        .detail-search-box-tag {
+            background: rgb(189, 190, 206);
+            color: black;
+            border: 1px solid black;
+            box-shadow: 1px 1px black;
+            padding: 4px;
+            border-radius: 8px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 
 <body>
     <header class="site-header"></header>
     <main class="main-page">
-        <div id="search-panel">
-            <span style="font-weight: 500;">検索:</span>
-            <input type="search" id="detail-search-box"><!--
+        <div id="detail-search-panel">
+            <span style="font-size: 0;">
+                <span style="font-weight: 500; font-size: 16px;">検索:</span>
+                <input type="search" id="detail-search-box"><!--
             --><button id="detail-search-btn">検索</button>
+            </span><br>
+            <div style="height: 12px;"></div>
+            <span>タグ: </span>
+            <span id="detail-search-box-tags"></span>
         </div>
         <h2 class="search-result-element">検索結果</h2>
         <div id="pages-view"></div>

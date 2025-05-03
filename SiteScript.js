@@ -1,35 +1,55 @@
 const topUrl = document.getElementById("top-url").content;
+let isMobile = document.documentElement.clientWidth < 480;
+
+setInterval(() => {
+    isMobile = document.documentElement.clientWidth < 480;
+}, 200);
+
+let currentLang = localStorage.getItem("lang") ?? navigator.language;
+let isJapanese = currentLang == "ja";
 
 window.addEventListener("load", () => {
+    const englishElements = Array.from(document.getElementsByClassName("english-element"));
+    const japaneseElements = Array.from(document.getElementsByClassName("japanese-element"));
+    if (isJapanese) {
+        englishElements.forEach((element) => {
+            element.style.display = "none";
+        });
+    } else {
+        japaneseElements.forEach((element) => {
+            element.style.display = "none";
+        })
+    }
     const header = document.querySelector("header.site-header");
     const siteNameLink = document.createElement("a");
     siteNameLink.href = topUrl;
     siteNameLink.style.textDecoration = "none";
     header.appendChild(siteNameLink);
     const siteName = document.createElement("span");
-    siteName.textContent = "BusTimeTable ドキュメント";
+    siteName.textContent = isJapanese ? "BusTimeTable ドキュメント" : "BusTimeTable Document";
     siteName.id = "site-name";
     siteNameLink.appendChild(siteName);
-    const detailSearchBox = document.createElement("input");
-    detailSearchBox.id = "search-box";
-    detailSearchBox.type = "search";
-    detailSearchBox.classList.add("search-box");
-    detailSearchBox.onkeydown = (event) => {
+    const searchBox = document.createElement("input");
+    searchBox.id = "search-box";
+    searchBox.type = "search";
+    searchBox.placeholder = isJapanese ? "検索 (例: 基本的な使い方)" : "Search (Example: Basic Usage)";
+    searchBox.classList.add("search-box");
+    searchBox.onkeydown = (event) => {
         if (event.key == "Enter") {
-            const detailSearchBox = document.getElementById("search-box");
-            if (detailSearchBox.value == "") {
+            const searchBox = document.getElementById("search-box");
+            if (searchBox.value == "") {
                 location.href = `${topUrl}search`;
             } else {
-                location.href = `${topUrl}search/?word=${detailSearchBox.value}`;
+                location.href = `${topUrl}search/?word=${searchBox.value}`;
             }
         }
     };
-    detailSearchBox.style.outline = "0";
-    detailSearchBox.style.marginLeft = document.documentElement.clientWidth - 550 + "px";
+    searchBox.style.outline = "0";
+    searchBox.style.marginLeft = document.documentElement.clientWidth - (isMobile ? 400 : 550) + "px";
     setInterval(() => {
-        detailSearchBox.style.marginLeft = document.documentElement.clientWidth - 550 + "px";
-    }, 300);
-    header.appendChild(detailSearchBox);
+        searchBox.style.marginLeft = document.documentElement.clientWidth - (isMobile ? 400 : 550) + "px";
+    }, 200);
+    header.appendChild(searchBox);
     const pageInfoView = document.getElementById("page-info-view");
     if (pageInfoView != null) {
         fetch(topUrl + "Pages.xml")
@@ -53,7 +73,7 @@ window.addEventListener("load", () => {
                     tagList.forEach((tag) => {
                         const tagName = tag.textContent;
                         const tagLink = document.createElement("a");
-                        tagLink.href = topUrl + `search?tag=${tagName}`;
+                        tagLink.href = topUrl + `search/?tags=${tagName}`;
                         const tagSpan = document.createElement("span");
                         tagSpan.classList.add("tag-span");
                         tagSpan.textContent = tagName;
@@ -64,7 +84,7 @@ window.addEventListener("load", () => {
                 }
             });
     }
-    const pageName = document.getElementById("page-name").content;
+    const pageName = document.getElementById("page-name") != null ? document.getElementById("page-name").content : "";
     if (pageName == "top-page") {
         const pagesView = document.getElementById("pages-view");
         fetch("Pages.xml")
@@ -92,7 +112,8 @@ window.addEventListener("load", () => {
     }
     if (pageName == "search-page") {
         const params = new URLSearchParams(location.search);
-        if (params.get("word") != null) {
+        const isSearchEmpty = params.get("word") == null && params.get("tags") == null;
+        if (!isSearchEmpty) {
             const searchResultHeader = document.getElementsByClassName("search-result-element");
             Array.from(searchResultHeader).forEach((element) => {
                 element.style.display = "block";
@@ -110,12 +131,19 @@ window.addEventListener("load", () => {
                         const pageUrl = page.getElementsByTagName("url")[0].textContent;
                         const pageTitle = page.getElementsByTagName("title")[0].textContent;
                         const pageDescription = page.getElementsByTagName("description")[0].textContent;
+                        const pageTags = Array.from(page.getElementsByTagName("tags")[0].children);
                         const word = params.get("word");
-                        isMatch = pageUrl.includes(word) || pageTitle.includes(word) || pageDescription.includes(word);
+                        const tags = params.get("tags").split(",");
+                        let isMatchTag = false;
+                        console.log(pageTags);
+                        for (const tag of pageTags) {
+                            if (tags.includes(tag.textContent)) isMatchTag = true;
+                        }
+                        isMatch = pageUrl.includes(word) || pageTitle.includes(word) || pageDescription.includes(word) || isMatchTag;
                         if (isMatch) {
                             const pageBox = document.createElement("a");
                             pageBox.classList.add("page-box");
-                            pageBox.href = pageUrl;
+                            pageBox.href = topUrl + pageUrl;
                             const pageTitleElement = document.createElement("h3");
                             pageTitleElement.classList.add("page-title");
                             const replacedTitle = pageTitle.replaceAll(word, `<span class="search-highlight-text-title">${word}</span>`);
@@ -140,6 +168,49 @@ window.addEventListener("load", () => {
                     location.href = `${topUrl}search/?word=${detailSearchBox.value}`;
                 }
             });
+            const detailSearchBoxTags = document.getElementById("detail-search-box-tags");
+            for (const tag of params.get("tags").split(",")) {
+                const detailSearchBoxTag = document.createElement("span");
+                detailSearchBoxTag.textContent = tag;
+                detailSearchBoxTag.classList.add("detail-search-box-tag");
+                detailSearchBoxTags.appendChild(detailSearchBoxTag);
+            }
+        }
+        if (isSearchEmpty) {
+            const detailSearchPanel = document.getElementById("detail-search-panel");
+            detailSearchPanel.style.display = "none";
+            fetch(topUrl + "Pages.xml")
+                .then((response) => response.text())
+                .then((XmlText) => {
+                    const domParser = new DOMParser();
+                    const pagesXml = domParser.parseFromString(XmlText, "text/xml");
+                    const pageList = pagesXml.documentElement;
+                    const pagesArray = Array.from(pageList.children);
+                    pagesArray.forEach((page) => {
+                        const pagesView = document.getElementById("pages-view");
+                        const pageUrl = page.getElementsByTagName("url")[0].textContent;
+                        const pageTitle = page.getElementsByTagName("title")[0].textContent;
+                        const pageDescription = page.getElementsByTagName("description")[0].textContent;
+                        const pageTags = Array.from(page.getElementsByTagName("tags")[0].children);
+                        const word = params.get("word");
+                        const tagsString = params.get("tags");
+                        const tags = (tagsString ?? "").split(",");
+                        const pageBox = document.createElement("a");
+                        pageBox.classList.add("page-box");
+                        pageBox.href = topUrl + pageUrl;
+                        const pageTitleElement = document.createElement("h3");
+                        pageTitleElement.classList.add("page-title");
+                        const replacedTitle = pageTitle.replaceAll(word, `<span class="search-highlight-text-title">${word}</span>`);
+                        pageTitleElement.innerHTML = replacedTitle;
+                        pageBox.appendChild(pageTitleElement);
+                        const pageDescriptionElement = document.createElement("p");
+                        pageDescriptionElement.classList.add("page-description");
+                        const replacedDescription = pageDescription.replaceAll(word, `<span class="search-highlight-text-description">${word}</span>`);
+                        pageDescriptionElement.innerHTML = replacedDescription;
+                        pageBox.appendChild(pageDescriptionElement);
+                        pagesView.appendChild(pageBox);
+                    });
+                });
         }
     }
 });

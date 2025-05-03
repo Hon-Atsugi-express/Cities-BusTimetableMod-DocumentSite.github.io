@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page-list>
+    <page>
+        <title>Basic Usage</title>
+        <description>This document explains the basics of how to use this mod.</description>
+        <tags>
+            <tag>Usage</tag>
+            <tag>For beginners</tag>
+        </tags>
+        <url>documents/BasicUsage</url>
+        <id>1</id>
+    </page>
+</page-list>
