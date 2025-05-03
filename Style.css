@@ -11,15 +11,30 @@ body {
     align-items: center;
 }
 
+#site-name {
+    color: rgb(217, 226, 245);
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
 .search-box {
     width: 250px;
     height: 40px;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 0;
 }
 
 .main-page {
     margin: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+#pages-view {
+    width: 95%;
 }
 
 .page-box {
@@ -28,6 +43,7 @@ body {
     display: block;
     text-decoration: none;
 }
+
 .page-box:hover {
     background: #11111150;
     transition: 0.5s;
@@ -42,17 +58,37 @@ body {
     font-size: 14px;
 }
 
+a:has(.tag-span) {
+    text-decoration: none;
+}
+
+.tag-span {
+    background: rgb(253, 251, 247);
+    color: black;
+    border: 1px solid black;
+    box-shadow: 1px 1px black;
+    padding: 4px;
+    border-radius: 8px;
+    margin-right: 5px;
+}
+
+.tag-span:hover {
+    background: rgb(186, 179, 165);
+    transition: 0.2s;
+}
+
 .no-margin {
     margin: 0;
 }
 
 @media screen and (max-width: 959px) {
-	.site-header {
+    .site-header {
         height: 60px;
     }
 }
+
 @media screen and (max-width: 480px) {
-	.site-header {
-        height: 50px;
+    .site-header {
+        display: none;
     }
 }

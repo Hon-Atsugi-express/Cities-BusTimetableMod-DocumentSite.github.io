@@ -4,6 +4,7 @@ window.addEventListener("load", () => {
     const header = document.querySelector("header.site-header");
     const siteNameLink = document.createElement("a");
     siteNameLink.href = topUrl;
+    siteNameLink.style.textDecoration = "none";
     header.appendChild(siteNameLink);
     const siteName = document.createElement("span");
     siteName.textContent = "BusTimeTable ドキュメント";
