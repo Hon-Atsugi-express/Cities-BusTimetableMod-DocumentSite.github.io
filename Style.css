@@ -15,7 +15,7 @@ body {
     width: 250px;
     height: 40px;
     border-radius: 10px;
-    border: 0;
+    border: 1px solid black;
 }
 
 .main-page {
