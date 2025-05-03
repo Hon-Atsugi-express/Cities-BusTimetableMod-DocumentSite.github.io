@@ -69,15 +69,21 @@
     <main class="main-page">
         <div id="detail-search-panel">
             <span style="font-size: 0;">
-                <span style="font-weight: 500; font-size: 16px;">検索:</span>
+                <span style="font-weight: 500; font-size: 16px;" class="japanese-element">検索:</span>
+                <span style="font-weight: 500; font-size: 16px;" class="english-element">Search:</span>
                 <input type="search" id="detail-search-box"><!--
-            --><button id="detail-search-btn">検索</button>
+            --><button id="detail-search-btn">
+                <span class="japanese-element">検索</span>
+                <span class="english-element">Search</span>
+            </button>
             </span><br>
             <div style="height: 12px;"></div>
-            <span>タグ: </span>
+            <span class="japanese-element">タグ: </span>
+            <span class="english-element">Tag: </span>
             <span id="detail-search-box-tags"></span>
         </div>
-        <h2 class="search-result-element">検索結果</h2>
+        <h2 class="japanese-element search-result-element">検索結果</h2>
+        <h2 class="english-element search-result-element">Search Results</h2>
         <div id="pages-view"></div>
     </main>
 </body>

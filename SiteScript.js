@@ -5,8 +5,7 @@ setInterval(() => {
     isMobile = document.documentElement.clientWidth < 480;
 }, 200);
 
-let currentLang = localStorage.getItem("lang") ?? navigator.language;
-let isJapanese = currentLang == "ja";
+let isJapanese = navigator.language == "ja";
 
 window.addEventListener("load", () => {
     const englishElements = Array.from(document.getElementsByClassName("english-element"));
@@ -18,7 +17,7 @@ window.addEventListener("load", () => {
     } else {
         japaneseElements.forEach((element) => {
             element.style.display = "none";
-        })
+        });
     }
     const header = document.querySelector("header.site-header");
     const siteNameLink = document.createElement("a");
@@ -50,9 +49,10 @@ window.addEventListener("load", () => {
         searchBox.style.marginLeft = document.documentElement.clientWidth - (isMobile ? 400 : 550) + "px";
     }, 200);
     header.appendChild(searchBox);
+    const pagesXmlUrl = isJapanese ? topUrl + "Pages.xml" : topUrl + "Pages-en.xml";
     const pageInfoView = document.getElementById("page-info-view");
     if (pageInfoView != null) {
-        fetch(topUrl + "Pages.xml")
+        fetch(pagesXmlUrl)
             .then((response) => response.text())
             .then((XmlText) => {
                 const domParser = new DOMParser();
@@ -66,10 +66,16 @@ window.addEventListener("load", () => {
                 const pageTitleElement = document.createElement("h2");
                 pageTitleElement.textContent = matchPage.getElementsByTagName("title")[0].textContent;
                 pageInfoView.appendChild(pageTitleElement);
+                const pageDescriptionElement = document.createElement("span");
+                pageDescriptionElement.classList.add("page-description");
+                pageDescriptionElement.style.marginBottom = "16px";
+                pageDescriptionElement.style.display = "inline-block";
+                pageDescriptionElement.textContent = matchPage.getElementsByTagName("description")[0].textContent;
+                pageInfoView.appendChild(pageDescriptionElement);
                 const tagList = Array.from(matchPage.getElementsByTagName("tags")[0].children);
                 if (tagList.length > 0) {
                     const pageTagsBox = document.createElement("div");
-                    pageTagsBox.appendChild(document.createTextNode("タグ: "));
+                    pageTagsBox.appendChild(document.createTextNode(isJapanese ? "タグ: " : "Tag: "));
                     tagList.forEach((tag) => {
                         const tagName = tag.textContent;
                         const tagLink = document.createElement("a");
@@ -87,7 +93,7 @@ window.addEventListener("load", () => {
     const pageName = document.getElementById("page-name") != null ? document.getElementById("page-name").content : "";
     if (pageName == "top-page") {
         const pagesView = document.getElementById("pages-view");
-        fetch("Pages.xml")
+        fetch(pagesXmlUrl)
             .then((response) => response.text())
             .then((XmlText) => {
                 const domParser = new DOMParser();
@@ -116,10 +122,14 @@ window.addEventListener("load", () => {
         if (!isSearchEmpty) {
             const searchResultHeader = document.getElementsByClassName("search-result-element");
             Array.from(searchResultHeader).forEach((element) => {
-                element.style.display = "block";
+                if (isJapanese) {
+                    if (element.classList.contains("japanese-element")) element.style.display = "block";
+                } else {
+                    if (element.classList.contains("english-element")) element.style.display = "block";
+                }
             });
             const pagesView = document.getElementById("pages-view");
-            fetch(topUrl + "Pages.xml")
+            fetch(pagesXmlUrl)
                 .then((response) => response.text())
                 .then((XmlText) => {
                     const domParser = new DOMParser();
@@ -179,7 +189,7 @@ window.addEventListener("load", () => {
         if (isSearchEmpty) {
             const detailSearchPanel = document.getElementById("detail-search-panel");
             detailSearchPanel.style.display = "none";
-            fetch(topUrl + "Pages.xml")
+            fetch(pagesXmlUrl)
                 .then((response) => response.text())
                 .then((XmlText) => {
                     const domParser = new DOMParser();
