@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>検索結果 - BusTimetable の ドキュメント</title>
+    <link href="../Style.css" rel="stylesheet">
+    <script src="../SiteScript.js" defer></script>
+    <meta name="top-url" content="../" id="top-url">
+    <meta name="page-name" content="search-page" id="page-name">
+    <style>
+        .search-highlight-text-title {
+            background: rgb(232, 232, 16);
+        }
+
+        .search-highlight-text-description {
+            background: rgb(202, 202, 27);
+        }
+
+        .search-result-element {
+            display: none;
+        }
+
+        #search-panel {
+            background: rgb(175, 175, 205);
+            padding: 8px;
+        }
+
+        #detail-search-box {
+            width: 250px;
+            height: 40px;
+            border: 0;
+            outline: 0;
+            display: inline;
+        }
+
+        #detail-search-btn {
+            height: 40px;
+            width: 60px;
+            border: 0;
+            background: #26269a;
+            color: #f6f1e8;
+            position: relative;
+            top: 1.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header"></header>
+    <main class="main-page">
+        <div id="search-panel">
+            <span style="font-weight: 500;">検索:</span>
+            <input type="search" id="detail-search-box"><!--
+            --><button id="detail-search-btn">検索</button>
+        </div>
+        <h2 class="search-result-element">検索結果</h2>
+        <div id="pages-view"></div>
+    </main>
+</body>
+
+</html>

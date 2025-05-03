@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page-list>
+    <page>
+        <title>基本的な使い方</title>
+        <description>このドキュメントでは、このMODの基本的な使い方を説明します</description>
+        <tags>
+            <tag>使い方</tag>
+            <tag>初心者向け</tag>
+        </tags>
+        <url>documents/BasicUsage</url>
+        <id>1</id>
+    </page>
+</page-list>
